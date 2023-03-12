@@ -1,16 +1,18 @@
 package GUI;
 import javax.swing.*;
+import BusinessLogic.PasswordEncrypter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URL;
+
 
 public class LoginGUI extends JFrame {
     private JLabel userLabel, passwordLabel;
     private JTextField userField;
     private JPasswordField passwordField;
     private JButton emojiButton;
+    private int loginAttempts = 0;
+    private final int MAX_LOGIN_ATTEMPTS = 5;
 
     public LoginGUI() {
         // Configurar la ventana
@@ -18,29 +20,17 @@ public class LoginGUI extends JFrame {
         setSize(400, 200);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        // Agregar ícono a la ventana
     
-
         // Configurar los componentes de la interfaz gráfica
         userLabel = new JLabel("Usuario:");
         passwordLabel = new JLabel("Contraseña:");
         userField = new JTextField(20);
         passwordField = new JPasswordField(20);
-        emojiButton = new JButton();
-
-        try {
-            // Cargar la imagen del emoji
-            URL url = new URL("https://em-content.zobj.net/thumbs/60/apple/124/key_1f511.png");
-            ImageIcon emojiIcon = new ImageIcon(url);
-            emojiButton.setIcon(emojiIcon);
-        } catch (IOException e) {
-            System.out.println("Error al cargar la imagen");
-        }
+        emojiButton = new JButton("Inicio");
 
         emojiButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                login();
+                login1();
             }
         });
 
@@ -53,26 +43,32 @@ public class LoginGUI extends JFrame {
         panel.add(passwordField);
         panel.add(new JLabel(""));
         panel.add(emojiButton);
-        panel.setBackground(Color.ORANGE);
+        panel.setBackground(Color.white);
 
         // Agregar el panel a la ventana
         getContentPane().add(panel);
         setVisible(true);
     }
 
-    private void login() {
+    private void login1() {
         String user = userField.getText();
         String password = new String(passwordField.getPassword());
-
-        // Verificar las credenciales
-        if (user.equals("usuario") && password.equals("contraseña")) {
-            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+        String encryptedPassword = PasswordEncrypter.encrypt(password); // Encriptar la contraseña ingresada
+    
+        // Verificar las credenciales en una fuente de datos
+        if ((user.equals("said.luna@epn.edu.ec") && encryptedPassword.equals("8425d7aa5a697e5b7f5f7646b42bedca")) ||
+            (user.equals("profe") && encryptedPassword.equals("81dc9bdb52d04dc20036dbd8313ed055")) || 
+            (user.equals("usuarioinvitado") && encryptedPassword.equals("ac55e04cc9a727d32a5029567eec53d0"))) {
+            JOptionPane.showMessageDialog(this, "Iniciando sesión");
+            dispose(); // cerrar la ventana
         } else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-        }
+            loginAttempts++;
+            if (loginAttempts == MAX_LOGIN_ATTEMPTS) {
+                JOptionPane.showMessageDialog(this, "Demasiados intentos fallidos. La aplicación se cerrará.");
+                dispose(); // cerrar la ventana
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            }
     }
-
-    public static void main(String[] args) {
-        new LoginGUI();
-    }
+}   
 }

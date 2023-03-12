@@ -5,8 +5,8 @@ public class Usuarios {
     private String SL_USUARIOS;
     private String SL_CONTRASENA;
     
-    public Usuarios(int sL_NR_USUARIOS, String sL_USUARIOS, String sL_CONTRASENA) {
-        SL_NR_USUARIOS = sL_NR_USUARIOS;
+    public Usuarios(String sL_USUARIOS, String sL_CONTRASENA) {
+        //SL_NR_USUARIOS = sL_NR_USUARIOS;
         SL_USUARIOS = sL_USUARIOS;
         SL_CONTRASENA = sL_CONTRASENA;
     }

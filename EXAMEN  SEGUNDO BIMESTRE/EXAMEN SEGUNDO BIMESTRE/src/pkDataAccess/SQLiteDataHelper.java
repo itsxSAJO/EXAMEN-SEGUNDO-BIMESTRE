@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import Framework.AppException;
+
 /**
  * <b> SQLiteDataHelper, </b> permite la gestion y el acceso a los datos a una base de datos SQLite3
  */
@@ -17,7 +19,6 @@ public abstract class SQLiteDataHelper {
     private static String DBPathConnection = null;
     private static Connection conn = null;
     public SQLiteDataHelper(String  dbPathConnection){
-        // Definir la cadena de conneccion : jdbc:sqlite:data\\TinderPet.db
         if (!dbPathConnection.isEmpty())
             SQLiteDataHelper.DBPathConnection = dbPathConnection;
     }
@@ -40,20 +41,20 @@ public abstract class SQLiteDataHelper {
         return conn;
     }
 
-    protected static ResultSet getResultSet(String sql) throws SQLException     
+    protected static ResultSet getResultSet(String sql) throws SQLException, AppException    
     {
         Connection conn = null;
         Statement  stmt = null;
         ResultSet  rs   = null;
-       // try {
+       try {
             conn = getConnection();            // jdbc:sqlite:data\\TinderPet.db 
             stmt = conn.createStatement();     // CRUD : select * ...
             rs   = stmt.executeQuery(sql);     //
-        // } 
-        // catch (SQLException e) {
-        //     System.out.println(e.getMessage());
-        //     throw new AppException(APP.GLOBAL.DB_EXCEPTION,"Failed to connect to database", e);
-        // }
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new AppException("Failed to connect to database");
+         }
         return rs;
     }
 }

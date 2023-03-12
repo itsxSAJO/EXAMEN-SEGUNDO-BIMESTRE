@@ -6,14 +6,14 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class AppConfiguration {
-    private static Properties config = null;
+    private static Properties slConfig = null;
     //OutputStream configOutput = null;
-    public static boolean load(String pathConfigFile){
+    public static boolean slLoad(String slPathConfigFile){
         try{
-            if (config == null)   
-                config = new Properties();
-            InputStream configInput = new FileInputStream(pathConfigFile);
-            config.load(configInput);
+            if (slConfig == null)   
+                slConfig = new Properties();
+            InputStream slConfigInput = new FileInputStream(slPathConfigFile);
+            slConfig.load(slConfigInput);
 
             System.out.println(">> (ok) AppConfiguration.load()");
             return true;
@@ -26,17 +26,17 @@ public class AppConfiguration {
 
     //getProperty of 
     public static String getDBName(){
-        if (config != null)  
-            return config.getProperty(APP.GLOBAL.DB_NAME);  
+        if (slConfig != null)  
+            return slConfig.getProperty(APP.GLOBAL.DB_NAME);  
         else
             System.out.println(">> (issue) AppConfiguration.getDB_NAME(), llamar primero a AppConfiguration.load() y agregar DB_NAME en CONFIG ");
         return "";
     }
     public static String getDBPathConnection(){
         //"jdbc:sqlite:data\\TinderPet.db"
-        if (config != null && config.containsKey(APP.GLOBAL.DB_PATH)){
+        if (slConfig != null && slConfig.containsKey(APP.GLOBAL.DB_PATH)){
             String dbName  = getDBName();
-            String dbPath  = config.getProperty(APP.GLOBAL.DB_PATH); 
+            String dbPath  = slConfig.getProperty(APP.GLOBAL.DB_PATH); 
             dbPath =  "jdbc:sqlite:" + dbPath.replace('/', '\\') + "\\\\" + dbName;
             return dbPath;  
         }
@@ -47,10 +47,10 @@ public class AppConfiguration {
 
     // public static void setPropertyValue(String property, String value){
     //     try{
-    //         configOutput = new FileOutputStream("data/config.properties");
-    //         config.setProperty(property, value);
+    //         configOutput = new FileOutputStream("data/slConfig.properties");
+    //         slConfig.setProperty(property, value);
     //     } catch(Exception e){
-    //         JOptionPane.showMessageDialog(null, "Error guardando configuración\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    //         JOptionPane.showMessageDialog(null, "Error guardando configuraciï¿½n\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     //     }
     // }
     
